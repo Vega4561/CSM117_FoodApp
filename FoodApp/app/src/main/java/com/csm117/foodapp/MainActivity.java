@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,53 +26,31 @@ import android.graphics.Color;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
-    TextView mainTextView;
-    TextView infoTextView;
     Button acceptButton;
-    Button nextButton;
-    JSONArray food_items;
-    ImageView imageView;
-    JSONHandler jsonHandler;
-    Intent browserIntent;
-    boolean urlAvailable = false;
-    // For tests
+
+    // For test
     JSONObject steak_bowl = new JSONObject();
     JSONObject sushi = new JSONObject();
     JSONObject blank = new JSONObject();
-
-
+    JSONArray GalImages;
+    Intent browserIntent;
+    boolean urlAvailable;
+    TextView infoTextView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Access the TextView defined in layout XML
-        // and then set its text
-        mainTextView = (TextView) findViewById(R.id.main_textview);
-        mainTextView.setText("Find Local Food!");
+        acceptButton = (Button) findViewById(R.id.accept_button);
+        acceptButton.setOnClickListener(this);
         infoTextView = (TextView) findViewById(R.id.info_textview);
         infoTextView.setTextSize(20);
 
-        // Access the Button defined in layout XML
-        // and listen for it here
-        imageView = (ImageView) findViewById(R.id.img_food);
-        acceptButton = (Button) findViewById(R.id.accept_button);
-        acceptButton.setOnClickListener(this);
-        nextButton = (Button) findViewById(R.id.next_button);
-        nextButton.setOnClickListener(this);
-
-        Drawable d = nextButton.getBackground();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+        Drawable d = acceptButton.getBackground();
+        PorterDuffColorFilter filter = new PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
         d.setColorFilter(filter);
-
-        d = acceptButton.getBackground();
-        filter = new PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
-        d.setColorFilter(filter);
-
-        // set button text colour to be blue
-        nextButton.setTextColor(Color.parseColor("white"));
         acceptButton.setTextColor(Color.parseColor("white"));
-        // Create placeholder food_items JSONArray
+        // Test data setup
 
         try {
             steak_bowl.put("img_url", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
@@ -97,24 +76,43 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        food_items = new JSONArray();
-        food_items.put(steak_bowl);
-        food_items.put(sushi);
-        food_items.put(blank);
+        GalImages = new JSONArray();
+        GalImages.put(steak_bowl);
+        GalImages.put(sushi);
+        GalImages.put(blank);
 
-        // Get first entry
-        jsonHandler = new JSONHandler(food_items);
-        JSONObject first = jsonHandler.getNext();
-        Picasso.with(this).load(first.optString("img_url"))
-                   .placeholder(R.drawable.no_image).into(imageView);
-        infoTextView.setText(first.optString("restaurant") +
-                ": " + first.optString("dish_name"));
-        if (first.has("url")) {
-            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(first.optString("url")));
-            urlAvailable = true;
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            public void onPageSelected(int position) {
+                // Check if this is the page you want.
+                JSONObject json = GalImages.optJSONObject(position);
+                TextView textView = (TextView) findViewById(R.id.info_textview);
+                textView.setText(json.optString("dish_name")
+                        + " - " + json.optString("restaurant"));
+                if (GalImages.optJSONObject(position).has("url")) {
+                    browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
+                    urlAvailable = true;
+                }
+                else
+                    urlAvailable = false;
+            }
+        });
+
+        TextView infoTextView = (TextView) findViewById(R.id.info_textview);
+        ImageAdapter adapter = new ImageAdapter(this, GalImages, infoTextView);
+        viewPager.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(urlAvailable){
+            startActivity(browserIntent);
         }
-        else
-            urlAvailable = false;
     }
 
     @Override
@@ -122,27 +120,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public void onClick(View v) {
-        String buttonName = ((Button) v).getText().toString();
-        mainTextView.setText(buttonName + " button pressed.");
-        JSONObject next = jsonHandler.getNext();
-        if(buttonName.equals("Next")){
-            Picasso.with(this).load(next.optString("img_url"))
-                    .placeholder(R.drawable.no_image).into(imageView);
-            infoTextView.setText(next.optString("restaurant") +
-                ": " + next.optString("dish_name"));
-            if (next.has("url")) {
-                browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(next.optString("url")));
-                urlAvailable = true;
-            }
-            else
-                urlAvailable = false;
-        }
-        if (buttonName.equals("Accept") && urlAvailable) {
-            startActivity(browserIntent);
-        }
     }
 }
