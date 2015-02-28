@@ -9,8 +9,10 @@ import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Color;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -32,10 +35,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     JSONObject steak_bowl = new JSONObject();
     JSONObject sushi = new JSONObject();
     JSONObject blank = new JSONObject();
+    JSONArray steakImgs = new JSONArray();
+    JSONArray sushiImgs = new JSONArray();
+    JSONArray blankImgs = new JSONArray();
+
     JSONArray GalImages;
     Intent browserIntent;
     boolean urlAvailable;
     TextView infoTextView;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +61,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         acceptButton.setTextColor(Color.parseColor("white"));
         // Test data setup
 
+        steakImgs.put("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
+        steakImgs.put("http://images.laweekly.com/imager/b/original/2377213/7a5d/Kalbi_plate_Gushi.jpg");
+        steakImgs.put("http://s3-media4.fl.yelpcdn.com/bphoto/-Qt7jSghOrJu9rRTOPNb9w/348s.jpg");
+        sushiImgs.put("http://s3-media3.fl.yelpcdn.com/bphoto/1XoBXYs2X0MqtWzpsN3HDg/l.jpg");
+        sushiImgs.put("http://unvegan.com/wp-content/uploads/2010/01/IMG_2784.jpg");
+        blankImgs.put("http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
+
+
         try {
-            steak_bowl.put("img_url", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
-            steak_bowl.put("dish_name", "Teriyaki steak bowl");
+            steak_bowl.put("img_urls", steakImgs);
+           // steak_bowl.put("dish_name", "Teriyaki steak bowl");
             steak_bowl.put("restaurant", "Gushi");
             steak_bowl.put("url", "http://gushi.menu");
         } catch (JSONException e) {
@@ -62,16 +79,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             e.printStackTrace();
         }
         try {
-            sushi.put("img_url", "http://s3-media3.fl.yelpcdn.com/bphoto/1XoBXYs2X0MqtWzpsN3HDg/l.jpg");
-            sushi.put("dish_name", "Sandra Roll");
+            sushi.put("img_urls", sushiImgs);
+            //sushi.put("dish_name", "Sandra Roll");
             sushi.put("restaurant", "Yamato");
             sushi.put("url", "http://www.yelp.com/biz/yamato-restaurant-los-angeles");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            blank.put("img_url", "http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
-            blank.put("dish_name", "Blank entry (test)");
+            blank.put("img_urls", blankImgs);
+            //blank.put("dish_name", "Blank entry (test)");
             blank.put("restaurant", "Blank restaurant (test)");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -83,6 +100,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
+
         viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {}
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -91,8 +109,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 // Check if this is the page you want.
                 JSONObject json = GalImages.optJSONObject(position);
                 TextView textView = (TextView) findViewById(R.id.info_textview);
-                textView.setText(json.optString("dish_name")
-                        + " - " + json.optString("restaurant"));
+                textView.setText(json.optString("restaurant"));
                 if (GalImages.optJSONObject(position).has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
                     urlAvailable = true;
@@ -105,6 +122,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         TextView infoTextView = (TextView) findViewById(R.id.info_textview);
         ImageAdapter adapter = new ImageAdapter(this, GalImages, infoTextView);
         viewPager.setAdapter(adapter);
+
     }
 
 
@@ -121,4 +139,5 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 }

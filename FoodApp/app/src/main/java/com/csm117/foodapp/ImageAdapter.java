@@ -3,10 +3,13 @@ package com.csm117.foodapp;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,27 +27,25 @@ public class ImageAdapter extends PagerAdapter {
     JSONObject blank = new JSONObject();
 
 
-    //GalImages.add(salmonInt);
-    //GalImages.add(R.drawable.teriyaki_steak);
-    //GalImages.add(R.drawable.no_image);
-
     ImageAdapter(Context context, JSONArray URLs, TextView textView){
         this.context = context;
         subText = textView;
         if(URLs.length() > 0)
             GalImages = URLs;
+
         else {
+            JSONArray blankImgs = new JSONArray();
+            blankImgs.put("http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
             try {
-                blank.put("img_url", "http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
-                blank.put("dish_name", "Blank entry (test)");
+                blank.put("img_urls", blankImgs);
+                //blank.put("dish_name", "Blank entry (test)");
                 blank.put("restaurant", "Blank restaurant (test)");
                 GalImages.put(blank);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        subText.setText(GalImages.optJSONObject(0).optString("dish_name")
-            + " - " + GalImages.optJSONObject(0).optString("restaurant"));
+        subText.setText(GalImages.optJSONObject(0).optString("restaurant"));
     }
     @Override
     public int getCount() {
@@ -61,11 +62,13 @@ public class ImageAdapter extends PagerAdapter {
         ImageView imageView = new ImageView(context);
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
-        //imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        //subText.setText(lastText);
-        //lastText = GalImages.get(position).get(1);
-        Picasso.with(imageView.getContext()).load(GalImages.optJSONObject(position).optString("img_url"))
-                .placeholder(R.drawable.no_image).into(imageView);
+        Picasso.with(imageView.getContext()).load(GalImages.optJSONObject(position).optJSONArray("img_urls").optString(0))
+                .placeholder(R.drawable.loading).into(imageView);
+
+        // Swipe detector for additional images
+        ImageViewTracker ivt = new ImageViewTracker(imageView, GalImages.optJSONObject(position).optJSONArray("img_urls"));
+        TouchListener touchListener = new TouchListener(context, ivt);
+        imageView.setOnTouchListener(touchListener);
 
 
         ((ViewPager) container).addView(imageView, 0);
