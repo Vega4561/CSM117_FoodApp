@@ -3,6 +3,8 @@
     package="com.csm117.foodapp" >
     <!-- Needed for online permission -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- For calling permissions -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

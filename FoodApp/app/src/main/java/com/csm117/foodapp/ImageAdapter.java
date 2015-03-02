@@ -45,7 +45,7 @@ public class ImageAdapter extends PagerAdapter {
                 e.printStackTrace();
             }
         }
-        subText.setText(GalImages.optJSONObject(0).optString("restaurant"));
+        subText.setText("Restaurant: " + GalImages.optJSONObject(0).optString("restaurant"));
     }
     @Override
     public int getCount() {

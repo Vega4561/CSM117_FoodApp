@@ -30,6 +30,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     Button acceptButton;
+    Button callButton;
 
     // For test
     JSONObject steak_bowl = new JSONObject();
@@ -41,10 +42,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     JSONArray GalImages;
     Intent browserIntent;
+    Intent callIntent;
     boolean urlAvailable;
+    boolean phoneAvailable;
     TextView infoTextView;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
+        callButton = (Button) findViewById(R.id.call_button);
+        callButton.setOnClickListener(this);
         infoTextView = (TextView) findViewById(R.id.info_textview);
         infoTextView.setTextSize(20);
 
@@ -59,6 +62,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         PorterDuffColorFilter filter = new PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
         d.setColorFilter(filter);
         acceptButton.setTextColor(Color.parseColor("white"));
+
+        Drawable dc = callButton.getBackground();
+        PorterDuffColorFilter filterDc = new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+        dc.setColorFilter(filterDc);
+        callButton.setTextColor(Color.parseColor("white"));
         // Test data setup
 
         steakImgs.put("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
@@ -74,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
            // steak_bowl.put("dish_name", "Teriyaki steak bowl");
             steak_bowl.put("restaurant", "Gushi");
             steak_bowl.put("url", "http://gushi.menu");
+            steak_bowl.put("phone", "310-208-4038");
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -83,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             //sushi.put("dish_name", "Sandra Roll");
             sushi.put("restaurant", "Yamato");
             sushi.put("url", "http://www.yelp.com/biz/yamato-restaurant-los-angeles");
+            sushi.put("phone", "310-208-0100");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -106,16 +116,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             public void onPageSelected(int position) {
-                // Check if this is the page you want.
+                // Updates buttons when you change to a different restaurant view
                 JSONObject json = GalImages.optJSONObject(position);
                 TextView textView = (TextView) findViewById(R.id.info_textview);
-                textView.setText(json.optString("restaurant"));
-                if (GalImages.optJSONObject(position).has("url")) {
+                textView.setText("Restaurant: " + json.optString("restaurant"));
+                if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
                     urlAvailable = true;
                 }
                 else
                     urlAvailable = false;
+                if (json.has("phone")) {
+                    callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone").trim()));
+                    phoneAvailable = true;
+                }
+                else
+                    phoneAvailable = false;
             }
         });
 
@@ -123,13 +139,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         ImageAdapter adapter = new ImageAdapter(this, GalImages, infoTextView);
         viewPager.setAdapter(adapter);
 
-    }
+        // Initial button setup
+        JSONObject json = GalImages.optJSONObject(0);
+        if (json.has("url")) {
+            browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
+            urlAvailable = true;
+        }
+        else
+            urlAvailable = false;
+        if (json.has("phone")) {
+            callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone").trim()));
+            phoneAvailable = true;
+        }
+        else
+            phoneAvailable = false;
 
+    }
 
     @Override
     public void onClick(View v) {
-        if(urlAvailable){
+        String buttonName = ((Button) v).getText().toString();
+        if(buttonName.equals("More Info") && urlAvailable){
             startActivity(browserIntent);
+        }
+        if(buttonName.equals("Call") && phoneAvailable){
+            startActivity(callIntent);
         }
     }
 
