@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 public class TEST extends ActionBarActivity implements View.OnClickListener {
 
     Button btnGetLocation;
@@ -64,7 +63,6 @@ public class TEST extends ActionBarActivity implements View.OnClickListener {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
