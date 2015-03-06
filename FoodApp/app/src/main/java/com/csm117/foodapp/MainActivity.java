@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        /*
+        Query JSON Format:
+        Array of JSON objects, representing individual restaurants
+        Each Object has..
+        "icon" - icon for restaurant
+        "name" - name of restaurant
+        "open?" - (bool) is this restaurant open
+        "location" - json object containing "lat" and "long" keys
+        "photoUrls" - array of urls (string) to restaurant photos
+         */
+        String placesQueryJSON = intent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
+        Log.d("comment out: for example purposes", placesQueryJSON);
+
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
         callButton = (Button) findViewById(R.id.call_button);
