@@ -26,7 +26,7 @@ public class PlacesActivity extends ActionBarActivity {
     private final String API_KEY = "AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU";
     private final String DEFAULT_LOCATION = "34.0722, -118.4441";
     private final String DEFAULT_RADIUS = "1000";
-    private final String PREFERED_IMG_WIDTH = "200";
+    private final String PREFERRED_IMG_WIDTH = "200";
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
     public void startDisplayActivity(JSONArray ja){
@@ -111,7 +111,7 @@ public class PlacesActivity extends ActionBarActivity {
                 .path("/maps/api/place/photo")
                 .appendQueryParameter("key", API_KEY)
                 .appendQueryParameter("photoreference", photoref)
-                .appendQueryParameter("maxwidth", PREFERED_IMG_WIDTH)
+                .appendQueryParameter("maxwidth", PREFERRED_IMG_WIDTH)
                 .build();
         return photo_uri.toString();
     }
