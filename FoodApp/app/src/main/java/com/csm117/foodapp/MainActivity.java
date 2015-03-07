@@ -171,8 +171,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
                 else
                     urlAvailable = false;
-                if (json.has("phone")) {
-                    callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone").trim()));
+                if (json.has("phone_number")) {
+                    callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone_number").trim()));
                     phoneAvailable = true;
                 }
                 else
@@ -193,8 +193,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
         else
             urlAvailable = false;
-        if (json.has("phone")) {
-            callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone").trim()));
+        if (json.has("phone_number")) {
+            callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone_number").trim()));
             phoneAvailable = true;
         }
         else
