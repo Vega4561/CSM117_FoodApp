@@ -104,6 +104,10 @@ public class PlacesActivity extends ActionBarActivity {
                         //error handle here
                     }
                     //send data to mainactivity
+
+
+                    Log.i(TAG, "in PlacesActivity \nrestaurants: " + restaurants);
+
                     startDisplayActivity(restaurants);
                 } catch (Exception e){
                     e.printStackTrace();
