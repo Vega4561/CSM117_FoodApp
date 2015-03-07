@@ -162,29 +162,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Toast.makeText(this, "Calling...", Toast.LENGTH_SHORT).show();
                 startActivity(callIntent);
                 return;
-            case R.id.btnLocation:
-                Toast.makeText(this, "Locating...", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, LocationActivity.class);
-                startActivity(intent);
-                return;
-            case R.id.btnQuery:
-                Toast.makeText(this, "Querying...", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, YelpActivity.class);
-                startActivity(intent);
-                return;
             default:
         }
     }
-/*    @Override
-    public void onClick(View v) {
-        String buttonName = ((Button) v).getText().toString();
-        if(buttonName.equals("More Info") && urlAvailable){
-            startActivity(browserIntent);
-        }
-        if(buttonName.equals("Call") && phoneAvailable){
-            startActivity(callIntent);
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
