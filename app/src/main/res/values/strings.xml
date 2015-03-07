@@ -15,5 +15,8 @@
     <string name="action_about">About</string>
     <string name="title_activity_test">TEST</string>
     <string name="test">Testing fun, jolly good time.</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_places">PlacesActivity</string>
+    <string name="places_send"> Send Restaurant Query </string>
 
 </resources>
