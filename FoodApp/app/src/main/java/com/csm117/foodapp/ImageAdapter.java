@@ -45,7 +45,21 @@ public class ImageAdapter extends PagerAdapter {
                 e.printStackTrace();
             }
         }
-        subText.setText("Restaurant: " + GalImages.optJSONObject(0).optString("name"));
+
+        String openStatus;
+        JSONObject json = GalImages.optJSONObject(0);
+
+        if(json.has("open?")){
+            if(json.optString("open?").equals("true"))
+                openStatus = "Currently open.";
+            else
+                openStatus = "Currently closed.";
+        }
+        else{
+            openStatus = "";
+        }
+
+        textView.setText("Restaurant: " + json.optString("name") + ".\n" + openStatus);
     }
     @Override
     public int getCount() {

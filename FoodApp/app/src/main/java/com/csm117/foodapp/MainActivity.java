@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         dc.setColorFilter(filterDc);
         callButton.setTextColor(Color.parseColor("white"));
         // Test data setup
-
+        /*
         steakImgs.put("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
         steakImgs.put("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU&photoreference=CnRnAAAA_10uiYflyBTq4vkcouxtEFBgEs_DU" +
                 "lneTogs1cjnA9SWajnLaNErpHEjIOV9IpBE2ZbJ_4ppIvJuUFDi8IW5D9S7AdpeSUYJLHsqV24oHOpIU1DEGecur9PBOWdEUxIAMYVicl5Gx364CC7htC_rLBIQhKfbm0LMPRnaFdAx2WZKZRoUslNK2" +
@@ -126,7 +126,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         GalImages.put(steak_bowl);
         GalImages.put(sushi);
         GalImages.put(blank);*/
-        JSONArray jsonImages = new JSONArray();
+        //JSONArray jsonImages = new JSONArray();
         try {
             GalImages = new JSONArray(placesQueryJSON);
         }
@@ -149,9 +149,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             public void onPageSelected(int position) {
                 // Updates buttons when you change to a different restaurant view
+                String openStatus;
                 JSONObject json = GalImages.optJSONObject(position);
+
+                if(json.has("open?")){
+                    if(json.optString("open?").equals("true"))
+                        openStatus = "Currently open.";
+                    else
+                        openStatus = "Currently closed.";
+                }
+                else{
+                    openStatus = "";
+                }
+
                 TextView textView = (TextView) findViewById(R.id.info_textview);
-                textView.setText("Restaurant: " + json.optString("name"));
+                textView.setText("Restaurant: " + json.optString("name") + ".\n" + openStatus);
+
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
                     urlAvailable = true;
@@ -173,6 +186,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // Initial button setup
         JSONObject json = GalImages.optJSONObject(0);
+
         if (json.has("url")) {
             browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
             urlAvailable = true;
