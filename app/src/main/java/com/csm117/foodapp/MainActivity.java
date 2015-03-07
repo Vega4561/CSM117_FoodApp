@@ -210,7 +210,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 return true;
             case R.id.action_locate:
                 Toast.makeText(this, "Acquiring Location...", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, LocationActivity.class);
+                intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_map:
