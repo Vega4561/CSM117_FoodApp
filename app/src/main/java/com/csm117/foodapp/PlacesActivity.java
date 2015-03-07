@@ -105,7 +105,6 @@ public class PlacesActivity extends ActionBarActivity {
                     }
                     //send data to mainactivity
 
-
                     Log.i(TAG, "in PlacesActivity \nrestaurants: " + restaurants);
 
                     startDisplayActivity(restaurants);
