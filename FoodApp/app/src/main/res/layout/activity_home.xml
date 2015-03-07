@@ -7,9 +7,27 @@
     tools:context="com.csm117.foodapp.HomeActivity">
 
     <Button
+        android:id="@+id/btnSendQuery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/places_send"
-        android:onClick="startYelpQuery"/>
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <!--    android:onClick="startYelpQuery" >-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_gettingLocation"
+        android:layout_marginBottom="182dp"
+        android:layout_above="@+id/btnSendQuery"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/address"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
