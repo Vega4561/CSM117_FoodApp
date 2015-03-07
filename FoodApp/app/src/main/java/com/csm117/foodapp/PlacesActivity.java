@@ -76,10 +76,14 @@ public class PlacesActivity extends ActionBarActivity {
                             myRestData.put("open?", ((JSONObject)rest.get("opening_hours")).get("open_now"));
                             myRestData.put("location", ((JSONObject) rest.get("geometry")).get("location"));
                             JSONArray photos = null;
-                            //ArrayList<String> photoUrls = new ArrayList<String>();
-                             JSONArray photoUrls = new JSONArray();
+                            JSONArray photoUrls = new JSONArray();
+                            //send place details request
+                            String id = (String) rest.get("place_id");
+                            String detailResponse = getDetailResponse(id);
+                            JSONObject detailJSON = (JSONObject) (new JSONObject(detailResponse)).get("result");
                             try {
-                                photos = rest.getJSONArray("photos");
+                                //get photos
+                                photos = detailJSON.getJSONArray("photos");
 
                                 for(int j = 0; j < photos.length(); j++){
                                     String ref = constructPhotoUrl((String) photos.getJSONObject(j).get("photo_reference"));
@@ -87,6 +91,16 @@ public class PlacesActivity extends ActionBarActivity {
                                 }
                             }
                             catch(org.json.JSONException e){
+                            }
+                            try {
+                                //get address
+                                myRestData.put("address", (String) detailJSON.get("formatted_address"));
+                            } catch (org.json.JSONException e) {
+                            }
+                            try {
+                                //get phone number
+                                myRestData.put("phone_number", (String) detailJSON.get("formatted_phone_number"));
+                            } catch (org.json.JSONException e) {
                             }
                             myRestData.put("photoUrls", photoUrls);
                             restaurants.put(myRestData);
@@ -114,6 +128,29 @@ public class PlacesActivity extends ActionBarActivity {
                 .appendQueryParameter("maxwidth", PREFERRED_IMG_WIDTH)
                 .build();
         return photo_uri.toString();
+    }
+    private String getDetailResponse(String id){
+        String detailResponse = "";
+        try {
+            Uri detail_uri = new Uri.Builder()
+                    .scheme("https")
+                    .authority("maps.googleapis.com")
+                    .path("/maps/api/place/details/json")
+                    .appendQueryParameter("placeid", id)
+                    .appendQueryParameter("key", API_KEY)
+                    .build();
+            URL detail_url = new URL(detail_uri.toString());
+            HttpURLConnection conn = (HttpURLConnection) detail_url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            detailResponse = s.hasNext() ? s.next() : "";
+        }
+        catch(Exception e){
+
+        }
+        return detailResponse;
     }
 
     @Override
