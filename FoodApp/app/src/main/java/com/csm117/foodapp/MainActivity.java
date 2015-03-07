@@ -42,6 +42,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     JSONArray blankImgs = new JSONArray();
 
     JSONArray GalImages;
+    //JSONArray TestImages;
     Intent browserIntent;
     Intent callIntent;
     boolean urlAvailable;
@@ -64,7 +65,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         "photoUrls" - array of urls (string) to restaurant photos
          */
         String placesQueryJSON = intent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
-        Log.d("comment out: for example purposes", placesQueryJSON);
+        //placesQueryJSON = placesQueryJSON.replace("\\", "");
+        Log.d("JSON String:", placesQueryJSON);
 
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
@@ -85,17 +87,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Test data setup
 
         steakImgs.put("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBKJ2dWOpjxA4q-yZHulrmqWLWkceCcOyrwxSDCNAF54UsYF_zug");
-        steakImgs.put("http://images.laweekly.com/imager/b/original/2377213/7a5d/Kalbi_plate_Gushi.jpg");
+        steakImgs.put("https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU&photoreference=CnRnAAAA_10uiYflyBTq4vkcouxtEFBgEs_DU" +
+                "lneTogs1cjnA9SWajnLaNErpHEjIOV9IpBE2ZbJ_4ppIvJuUFDi8IW5D9S7AdpeSUYJLHsqV24oHOpIU1DEGecur9PBOWdEUxIAMYVicl5Gx364CC7htC_rLBIQhKfbm0LMPRnaFdAx2WZKZRoUslNK2" +
+                "FWctkdw-npqJ-joJdBtMnM&maxwidth=200");
         steakImgs.put("http://s3-media4.fl.yelpcdn.com/bphoto/-Qt7jSghOrJu9rRTOPNb9w/348s.jpg");
         sushiImgs.put("http://s3-media3.fl.yelpcdn.com/bphoto/1XoBXYs2X0MqtWzpsN3HDg/l.jpg");
         sushiImgs.put("http://unvegan.com/wp-content/uploads/2010/01/IMG_2784.jpg");
-        blankImgs.put("http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
+        //blankImgs.put("http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
 
 
         try {
-            steak_bowl.put("img_urls", steakImgs);
+            steak_bowl.put("photoUrls", steakImgs);
            // steak_bowl.put("dish_name", "Teriyaki steak bowl");
-            steak_bowl.put("restaurant", "Gushi");
+            steak_bowl.put("name", "Gushi");
             steak_bowl.put("url", "http://gushi.menu");
             steak_bowl.put("phone", "310-208-4038");
         } catch (JSONException e) {
@@ -103,26 +107,39 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             e.printStackTrace();
         }
         try {
-            sushi.put("img_urls", sushiImgs);
+            sushi.put("photoUrls", sushiImgs);
             //sushi.put("dish_name", "Sandra Roll");
-            sushi.put("restaurant", "Yamato");
+            sushi.put("name", "Yamato");
             sushi.put("url", "http://www.yelp.com/biz/yamato-restaurant-los-angeles");
             sushi.put("phone", "310-208-0100");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            blank.put("img_urls", blankImgs);
+            blank.put("photoUrls", blankImgs);
             //blank.put("dish_name", "Blank entry (test)");
-            blank.put("restaurant", "Blank restaurant (test)");
+            blank.put("name", "Blank restaurant (test)");
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }/*
         GalImages = new JSONArray();
         GalImages.put(steak_bowl);
         GalImages.put(sushi);
-        GalImages.put(blank);
-
+        GalImages.put(blank);*/
+        JSONArray jsonImages = new JSONArray();
+        try {
+            GalImages = new JSONArray(placesQueryJSON);
+        }
+        catch (Throwable t){
+            Log.e("Food App", "Could not parse malformed JSON: \"" + placesQueryJSON + "\"");
+        }/*
+        if(jsonImages.optJSONObject(0).has("photoUrls") && jsonImages.optJSONObject(0).optJSONArray("photoUrls") != null){
+        Log.d("Food app", String.valueOf(jsonImages.optJSONObject(0).optJSONArray("photoUrls").length()));}
+        if(jsonImages.optJSONObject(1).has("photoUrls") && jsonImages.optJSONObject(1).optJSONArray("photoUrls") != null){
+            Log.d("Food app", String.valueOf(jsonImages.optJSONObject(1).optJSONArray("photoUrls").length()));}
+        if(jsonImages.optJSONObject(2).has("photoUrls") && jsonImages.optJSONObject(2).optJSONArray("photoUrls") != null){
+            Log.d("Food app", String.valueOf(jsonImages.optJSONObject(2).optJSONArray("photoUrls").length()));}
+*/
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
 
@@ -134,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 // Updates buttons when you change to a different restaurant view
                 JSONObject json = GalImages.optJSONObject(position);
                 TextView textView = (TextView) findViewById(R.id.info_textview);
-                textView.setText("Restaurant: " + json.optString("restaurant"));
+                textView.setText("Restaurant: " + json.optString("name"));
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
                     urlAvailable = true;

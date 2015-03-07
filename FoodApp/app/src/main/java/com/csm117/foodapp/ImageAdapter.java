@@ -37,15 +37,15 @@ public class ImageAdapter extends PagerAdapter {
             JSONArray blankImgs = new JSONArray();
             blankImgs.put("http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg");
             try {
-                blank.put("img_urls", blankImgs);
+                blank.put("photoUrls", blankImgs);
                 //blank.put("dish_name", "Blank entry (test)");
-                blank.put("restaurant", "Blank restaurant (test)");
+                blank.put("name", "Blank restaurant (test)");
                 GalImages.put(blank);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        subText.setText("Restaurant: " + GalImages.optJSONObject(0).optString("restaurant"));
+        subText.setText("Restaurant: " + GalImages.optJSONObject(0).optString("name"));
     }
     @Override
     public int getCount() {
@@ -62,14 +62,22 @@ public class ImageAdapter extends PagerAdapter {
         ImageView imageView = new ImageView(context);
         int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium);
         imageView.setPadding(padding, padding, padding, padding);
-        Picasso.with(imageView.getContext()).load(GalImages.optJSONObject(position).optJSONArray("img_urls").optString(0))
+        String imgURL;
+        if(GalImages.optJSONObject(position).has("photoUrls") && GalImages.optJSONObject(position).optJSONArray("photoUrls") != null){
+            if (GalImages.optJSONObject(position).optJSONArray("photoUrls").length() > 0) {
+                imgURL = GalImages.optJSONObject(position).optJSONArray("photoUrls").optString(0);
+                // Swipe detector for additional images
+                ImageViewTracker ivt = new ImageViewTracker(imageView, GalImages.optJSONObject(position).optJSONArray("photoUrls"));
+                TouchListener touchListener = new TouchListener(context, ivt);
+                imageView.setOnTouchListener(touchListener);
+            }
+            else
+                imgURL = "http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg";
+        }
+        else
+            imgURL = "http://img2.wikia.nocookie.net/__cb20130511180903/legendmarielu/images/b/b4/No_image_available.jpg";
+        Picasso.with(imageView.getContext()).load(imgURL)
                 .placeholder(R.drawable.loading).into(imageView);
-
-        // Swipe detector for additional images
-        ImageViewTracker ivt = new ImageViewTracker(imageView, GalImages.optJSONObject(position).optJSONArray("img_urls"));
-        TouchListener touchListener = new TouchListener(context, ivt);
-        imageView.setOnTouchListener(touchListener);
-
 
         ((ViewPager) container).addView(imageView, 0);
         return imageView;

@@ -76,13 +76,14 @@ public class PlacesActivity extends ActionBarActivity {
                             myRestData.put("open?", ((JSONObject)rest.get("opening_hours")).get("open_now"));
                             myRestData.put("location", ((JSONObject) rest.get("geometry")).get("location"));
                             JSONArray photos = null;
-                            ArrayList<String> photoUrls = new ArrayList<String>();
+                            //ArrayList<String> photoUrls = new ArrayList<String>();
+                             JSONArray photoUrls = new JSONArray();
                             try {
                                 photos = rest.getJSONArray("photos");
 
                                 for(int j = 0; j < photos.length(); j++){
                                     String ref = constructPhotoUrl((String) photos.getJSONObject(j).get("photo_reference"));
-                                    photoUrls.add(ref);
+                                    photoUrls.put(ref);
                                 }
                             }
                             catch(org.json.JSONException e){
