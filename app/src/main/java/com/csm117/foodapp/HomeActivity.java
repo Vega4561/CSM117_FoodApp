@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class HomeActivity extends ActionBarActivity
 
     private TextView mAddress;
     private TextView tvAddr;
+    private ProgressBar progressBar;
 
     double latitude;
     double longitude;
@@ -54,6 +56,7 @@ public class HomeActivity extends ActionBarActivity
         mAddress.setText("Attempting to acquire coordinates...");
 
         tvAddr = (TextView) findViewById(R.id.tv_gettingLocation);
+        progressBar = (ProgressBar) findViewById(R.id.progBar);
 
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,19 +66,22 @@ public class HomeActivity extends ActionBarActivity
         });
         mLocationClient = new LocationClient();
 
+        //progressBar.setVisibility(View.VISIBLE);
+
         View.OnClickListener fabClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCurrentLocation == null) {
                     //Toast.makeText(getApplicationContext(), "Unable to get location.", Toast.LENGTH_LONG).show();
                     mAddress.setText("Unable to get location.");
+                    //progressBar.setVisibility(View.VISIBLE);
 
                     //refreshLocation(true);
                 } else {
                     tvAddr.setVisibility(View.VISIBLE);
-                    tvAddr.setText("Coordinates: " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
-                    mAddress.setText("Coordinates: " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude());
-
+                    tvAddr.setText("Coordinates:\n" + mCurrentLocation.getLatitude() + "\n" + mCurrentLocation.getLongitude());
+                    mAddress.setText("Coordinates:\n" + mCurrentLocation.getLatitude() + "\n" + mCurrentLocation.getLongitude());
+                    //progressBar.setVisibility(View.INVISIBLE);
                     //onDisconnected();
                 }
             }
@@ -110,6 +116,7 @@ public class HomeActivity extends ActionBarActivity
         mLocationClient.connect();
         mAddress.setText("Connecting...");
         System.out.println("Connecting...");
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -119,6 +126,7 @@ public class HomeActivity extends ActionBarActivity
 
         mAddress.setText("Disconnecting...");
         System.out.println("Disconnecting...");
+        progressBar.setVisibility(View.INVISIBLE);
         super.onStop();
     }
 
@@ -169,6 +177,7 @@ public class HomeActivity extends ActionBarActivity
                 //        getApplicationContext(), "Acquired coordinates\n\tLatitude: " + latitude
                 //                + "\n\tLongitude: " + longitude,
                 //        Toast.LENGTH_LONG).show();
+
                 startYelpQuery();
             }
         }

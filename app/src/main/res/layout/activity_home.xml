@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csm117.foodapp.HomeActivity"
-    android:background="@drawable/bg">
+    android:background="@android:color/holo_purple">
 
     <Button
         android:id="@+id/btnSendQuery"
@@ -18,15 +18,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_gettingLocation"
-        android:layout_marginBottom="182dp"
+        android:layout_marginBottom="31dp"
         android:layout_above="@+id/btnSendQuery"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="14dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/address"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@mipmap/ic_logo"
+        android:layout_above="@+id/address"
+        android:layout_marginBottom="81dp"
+        android:layout_alignRight="@+id/btnSendQuery"
+        android:layout_alignEnd="@+id/btnSendQuery"
+        android:layout_alignLeft="@+id/btnSendQuery"
+        android:layout_alignStart="@+id/btnSendQuery"
+        android:layout_alignParentTop="true" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progBar"
+        android:layout_above="@+id/tv_gettingLocation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>
