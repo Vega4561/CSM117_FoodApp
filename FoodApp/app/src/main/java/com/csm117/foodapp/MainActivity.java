@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,18 +36,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 
     JSONArray GalImages;
-    //JSONArray TestImages;
     Intent browserIntent;
     Intent callIntent;
+    Intent moreInfoIntent;
     boolean urlAvailable;
     boolean phoneAvailable;
     TextView infoTextView;
+    public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
+        Intent placeIntent = getIntent();
+        moreInfoIntent = new Intent(this, MoreInfo.class);
         /*
         Query JSON Format:
         Array of JSON objects, representing individual restaurants
@@ -57,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         "location" - json object containing "lat" and "long" keys
         "photoUrls" - array of urls (string) to restaurant photos
          */
-        String placesQueryJSON = intent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
+        String placesQueryJSON = placeIntent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
         //placesQueryJSON = placesQueryJSON.replace("\\", "");
         Log.d("JSON String:", placesQueryJSON);
 
@@ -95,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 // Updates buttons when you change to a different restaurant view
                 String openStatus;
                 JSONObject json = GalImages.optJSONObject(position);
-
+                moreInfoIntent.putExtra(EXTRA_MESSAGE, json.toString());
                 if(json.has("open?")){
                     if(json.optString("open?").equals("true"))
                         openStatus = "Currently open.";
@@ -108,13 +111,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 TextView textView = (TextView) findViewById(R.id.info_textview);
                 textView.setText("Restaurant: " + json.optString("name") + ".\n" + openStatus);
-
+                /*
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
                     urlAvailable = true;
                 }
                 else
-                    urlAvailable = false;
+                    urlAvailable = false;*/
                 if (json.has("phone_number")) {
                     callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone_number").trim()));
                     phoneAvailable = true;
@@ -131,12 +134,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Initial button setup
         JSONObject json = GalImages.optJSONObject(0);
 
+        moreInfoIntent.putExtra(EXTRA_MESSAGE, json.toString());
+        /*
         if (json.has("url")) {
             browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
             urlAvailable = true;
         }
         else
-            urlAvailable = false;
+            urlAvailable = false;*/
         if (json.has("phone_number")) {
             callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + json.optString("phone_number").trim()));
             phoneAvailable = true;
@@ -149,8 +154,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         String buttonName = ((Button) v).getText().toString();
-        if(buttonName.equals("More Info") && urlAvailable){
-            startActivity(browserIntent);
+        if(buttonName.equals("More Info") /*&& urlAvailable*/){
+            //startActivity(browserIntent);
+            startActivity(moreInfoIntent);
         }
         if(buttonName.equals("Call") && phoneAvailable){
             startActivity(callIntent);

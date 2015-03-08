@@ -17,18 +17,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 public class PlacesActivity extends ActionBarActivity {
-
-    public final static String TAG = "PlacesActivity";
-
     private final String API_KEY = "AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU";
-    private String DEFAULT_LOCATION = "34.0722, -118.4441";
+    private final String DEFAULT_LOCATION = "34.0722, -118.4441";
     private final String DEFAULT_RADIUS = "1000";
     private final String PREFERRED_IMG_WIDTH = "200";
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
@@ -43,17 +39,6 @@ public class PlacesActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
-
-        Bundle coords = getIntent().getExtras();
-        String lat = coords.getString("LATITUDE");
-        String lng = coords.getString("LONGITUDE");
-        Toast.makeText(
-                getApplicationContext(), "Obtained\n\tLatitude: " + lat
-                        + "\n\tLongitude: " + lng, Toast.LENGTH_SHORT).show();
-        DEFAULT_LOCATION = lat + "," + lng;
-
-        Log.i(TAG, "in PlacesActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
-
 
         new Thread(new Runnable() {
             public void run() {

@@ -11,5 +11,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="places_send"> Send Restaurant Query </string>
     <string name="title_activity_places">PlacesActivity</string>
+    <string name="title_activity_more_info">MoreInfo</string>
 
 </resources>
