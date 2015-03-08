@@ -34,7 +34,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     Button acceptButton;
     Button callButton;
 
-
     JSONArray GalImages;
     Intent browserIntent;
     Intent callIntent;
@@ -72,12 +71,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         infoTextView.setTextSize(20);
 
         Drawable d = acceptButton.getBackground();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+        PorterDuffColorFilter filter = new PorterDuffColorFilter(0xffB30086, PorterDuff.Mode.SRC_ATOP);
         d.setColorFilter(filter);
         acceptButton.setTextColor(Color.parseColor("white"));
 
         Drawable dc = callButton.getBackground();
-        PorterDuffColorFilter filterDc = new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+        PorterDuffColorFilter filterDc = new PorterDuffColorFilter(0xffB3002D, PorterDuff.Mode.SRC_ATOP);
         dc.setColorFilter(filterDc);
         callButton.setTextColor(Color.parseColor("white"));
 
@@ -102,15 +101,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if(json.has("open?")){
                     if(json.optString("open?").equals("true"))
                         openStatus = "Currently open.";
-                    else
+                    else if(json.optString("open?").equals("false"))
                         openStatus = "Currently closed.";
+                    else openStatus = "";
                 }
-                else{
+                else
                     openStatus = "";
-                }
 
                 TextView textView = (TextView) findViewById(R.id.info_textview);
-                textView.setText("Restaurant: " + json.optString("name") + ".\n" + openStatus);
+                textView.setText(json.optString("name") + "\n" + openStatus);
                 /*
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));

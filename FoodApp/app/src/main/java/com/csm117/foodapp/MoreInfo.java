@@ -74,7 +74,7 @@ public class MoreInfo extends ActionBarActivity {
             default: price = " (unspecified).";
         }
         if(price.equals(" (unspecified)."))
-            mNameList.add("Price level (0-4): " + price);
+            mNameList.add("Price level (0-4): Not available.");
         else
             mNameList.add("Price level (0-4): " + restJson.optString("price_level") + price);
 

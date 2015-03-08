@@ -52,14 +52,15 @@ public class ImageAdapter extends PagerAdapter {
         if(json.has("open?")){
             if(json.optString("open?").equals("true"))
                 openStatus = "Currently open.";
-            else
+            else if(json.optString("open?").equals("false"))
                 openStatus = "Currently closed.";
+            else openStatus = "";
         }
         else{
             openStatus = "";
         }
 
-        textView.setText("Restaurant: " + json.optString("name") + ".\n" + openStatus);
+        textView.setText(json.optString("name") + "\n" + openStatus);
     }
     @Override
     public int getCount() {
