@@ -54,6 +54,29 @@ public class MoreInfo extends ActionBarActivity {
             mNameList.add("Currently closed.");
         mNameList.add("Address: " + restJson.optString("address"));
         mNameList.add("Phone Number: " + restJson.optString("phone_number"));
+        if(restJson.optString("rating").equals("-1")){
+            mNameList.add("Rating (1-5): Not available.");
+        }
+        else
+            mNameList.add("Rating (1-5): " + restJson.optString("rating"));
+        String price;
+        switch (restJson.optString("price_level")){
+            case "0": price = " (free).";
+                break;
+            case "1": price = " (inexpensive).";
+                break;
+            case "2": price = " (moderate).";
+                break;
+            case "3": price = " (expensive).";
+                break;
+            case "4": price = " (very expensive).";
+                break;
+            default: price = " (unspecified).";
+        }
+        if(price.equals(" (unspecified)."))
+            mNameList.add("Price level (0-4): " + price);
+        else
+            mNameList.add("Price level (0-4): " + restJson.optString("price_level") + price);
 
         mArrayAdapter.notifyDataSetChanged();
 

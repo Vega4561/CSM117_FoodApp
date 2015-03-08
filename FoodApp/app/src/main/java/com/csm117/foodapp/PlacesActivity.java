@@ -73,7 +73,23 @@ public class PlacesActivity extends ActionBarActivity {
                             JSONObject myRestData = new JSONObject();
                             myRestData.put("icon", rest.get("icon"));
                             myRestData.put("name", rest.get("name"));
-                            myRestData.put("open?", ((JSONObject)rest.get("opening_hours")).get("open_now"));
+                            if(rest.has("rating")) {
+                                myRestData.put("rating", rest.get("rating"));
+                            }
+                            else
+                                myRestData.put("rating", "-1");
+                            if(rest.has("price_level")) {
+                                myRestData.put("price_level", rest.get("price_level"));
+                            }
+                            else
+                                myRestData.put("price_level", "-1");
+                            if(rest.has("opening_hours"))
+                                if(((JSONObject)rest.get("opening_hours")).has("open_now"))
+                                    myRestData.put("open?", ((JSONObject)rest.get("opening_hours")).get("open_now"));
+                                else
+                                    myRestData.put("open?", "not_given");
+                            else
+                                myRestData.put("open?", "not_given");
                             myRestData.put("location", ((JSONObject) rest.get("geometry")).get("location"));
                             JSONArray photos = null;
                             JSONArray photoUrls = new JSONArray();
