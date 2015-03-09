@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Log.e("Food App", "Could not parse malformed JSON: \"" + placesQueryJSON + "\"");
         }
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-
+        viewPager.setBackgroundColor(Color.DKGRAY);
 
         viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             public void onPageScrollStateChanged(int state) {}
