@@ -32,6 +32,7 @@ public class PlacesActivity extends ActionBarActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, ja.toString());
         startActivity(intent);
+        finish();
     }
 
     @Override

@@ -276,5 +276,6 @@ public class HomeActivity extends ActionBarActivity
         intent.putExtra("LATITUDE", Double.toString(latitude));
         intent.putExtra("LONGITUDE", Double.toString(longitude));
         startActivity(intent);
+        finish();
     }
 }
