@@ -1,5 +1,6 @@
 package com.csm117.foodapp;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -78,12 +79,22 @@ public class LocationActivity extends ActionBarActivity
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
-            String a = String.valueOf(mLastLocation.getLatitude());
-            String b = String.valueOf(mLastLocation.getLongitude());
-            Log.d(TAG, "Latitude: " + a);
-            Log.d(TAG, "Longitude: " + b);
+            String latitude = String.valueOf(mLastLocation.getLatitude());
+            String longitude = String.valueOf(mLastLocation.getLongitude());
+            Log.d(TAG, "Latitude: " + latitude);
+            Log.d(TAG, "Longitude: " + longitude);
             mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+
+            String DEFAULT_LOCATION = latitude + "," + longitude;
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("LATITUDE", latitude);
+            intent.putExtra("LONGITUDE", longitude);
+            //intent.putExtra("DEFAULT_LOCATION", DEFAULT_LOCATION);
+            startActivity(intent);
+            finish();
+
         }
         else{
             mLatitudeText.setText("I suck");

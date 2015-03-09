@@ -28,9 +28,14 @@ public class PlacesActivity extends ActionBarActivity {
     private final String PREFERED_IMG_WIDTH = "200";
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
+    String latitude;
+    String longitude;
+
     public void startDisplayActivity(JSONArray ja){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, ja.toString());
+        intent.putExtra("LATITUDE", latitude);
+        intent.putExtra("LONGITUDE", longitude);
         startActivity(intent);
         finish();
     }
@@ -41,12 +46,12 @@ public class PlacesActivity extends ActionBarActivity {
         setContentView(R.layout.activity_places);
 
         Bundle coords = getIntent().getExtras();
-        String lat = coords.getString("LATITUDE");
-        String lng = coords.getString("LONGITUDE");
+        latitude = coords.getString("LATITUDE");
+        longitude = coords.getString("LONGITUDE");
         Toast.makeText(
-                getApplicationContext(), "Obtained\n\tLatitude: " + lat
-                        + "\n\tLongitude: " + lng, Toast.LENGTH_SHORT).show();
-        DEFAULT_LOCATION = lat + "," + lng;
+                getApplicationContext(), "Obtained\n\tLatitude: " + latitude
+                        + "\n\tLongitude: " + longitude, Toast.LENGTH_SHORT).show();
+        DEFAULT_LOCATION = latitude + "," + longitude;
 
         Log.i(TAG, "in PlacesActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
 

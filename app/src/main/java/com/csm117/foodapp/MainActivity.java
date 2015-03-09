@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+
+    public final static String TAG = "MainActivity";
 
     Button acceptButton;
     Button callButton;
@@ -40,10 +43,26 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     boolean phoneAvailable;
     TextView infoTextView;
 
+    String DEFAULT_LOCATION = "34.666,-118.666";
+    private String lat;
+    private String lng;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle coords = getIntent().getExtras();
+        lat = coords.getString("LATITUDE");
+        lng = coords.getString("LONGITUDE");
+        //DEFAULT_LOCATION = coords.getString("DEFAULT_LOCATION");
+        DEFAULT_LOCATION = lat + "," + lng;
+        DEFAULT_LOCATION = coords.getString("DEFAULT_LOCATION");
+        Toast.makeText(
+                getApplicationContext(), "Obtained\n\t" + DEFAULT_LOCATION, Toast.LENGTH_SHORT).show();
+
+        Log.i(TAG, "in MainActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
+
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
         callButton = (Button) findViewById(R.id.call_button);
@@ -180,21 +199,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         switch (item.getItemId())
         {
-            case R.id.action_test:
-                Toast.makeText(this, "Testing time...", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, TEST.class);
-                startActivity(intent);
-                return true;
             case R.id.action_search:
                 Toast.makeText(this, "Opening Search Dialog...", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_locate:
                 Toast.makeText(this, "Acquiring Location...", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, HomeActivity.class);
+                intent = new Intent(MainActivity.this, LocationActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.action_map:
                 Toast.makeText(this, "Opening Map...", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, MapsActivity.class);
+                intent.putExtra("LATITUDE", lat);
+                intent.putExtra("LONGITUDE", lng);
+                startActivity(intent);
                 return true;
             case R.id.action_settings:
                 Toast.makeText(this, "Opening Settings...", Toast.LENGTH_SHORT).show();
