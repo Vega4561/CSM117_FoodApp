@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csm117.foodapp.HomeActivity"
-    android:background="@android:color/holo_purple">
+    android:background="@drawable/background1">
 
     <Button
         android:id="@+id/btnSendQuery"
@@ -35,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:background="@mipmap/ic_logo"
         android:layout_above="@+id/address"
         android:layout_marginBottom="81dp"
         android:layout_alignRight="@+id/btnSendQuery"
