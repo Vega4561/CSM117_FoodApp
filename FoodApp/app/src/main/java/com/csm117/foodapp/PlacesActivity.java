@@ -188,7 +188,7 @@ public class PlacesActivity extends ActionBarActivity {
             detailResponse = s.hasNext() ? s.next() : "";
         }
         catch(Exception e){
-
+            Log.e(TAG, "Error in the details");
         }
         return detailResponse;
     }

@@ -88,7 +88,7 @@ public class LocationActivity extends ActionBarActivity
 
             String DEFAULT_LOCATION = latitude + "," + longitude;
 
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, PlacesActivity.class);
             intent.putExtra("LATITUDE", latitude);
             intent.putExtra("LONGITUDE", longitude);
             //intent.putExtra("DEFAULT_LOCATION", DEFAULT_LOCATION);

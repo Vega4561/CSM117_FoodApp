@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         String placesQueryJSON = placeIntent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
         //placesQueryJSON = placesQueryJSON.replace("\\", "");
-        //Log.d("JSON String:", placesQueryJSON);
+        Log.d("JSON String:", placesQueryJSON);
 
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
@@ -116,6 +116,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                 TextView textView = (TextView) findViewById(R.id.info_textview);
                 textView.setText(json.optString("name") + "\n" + openStatus);
+                if(json.has("location")){
+                    // Get coordinates
+                    lat = json.optJSONObject("location").optString("lat");
+                    lng = json.optJSONObject("location").optString("lng");
+                }
                 /*
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
@@ -140,6 +145,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         JSONObject json = GalImages.optJSONObject(0);
 
         moreInfoIntent.putExtra(EXTRA_MESSAGE, json.toString());
+        if(json.has("location")){
+            // Get coordinates
+            lat = json.optJSONObject("location").optString("lat");
+            lng = json.optJSONObject("location").optString("lng");
+        }
         /*
         if (json.has("url")) {
             browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
