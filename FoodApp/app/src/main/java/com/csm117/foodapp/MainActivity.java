@@ -20,16 +20,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Color;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+
+    public final static String TAG = "MainActivity";
 
     Button acceptButton;
     Button callButton;
@@ -43,25 +42,32 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     TextView infoTextView;
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
+    String DEFAULT_LOCATION = "34.666,-118.666";
+    private String lat;
+    private String lng;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle coords = getIntent().getExtras();
+        lat = coords.getString("LATITUDE");
+        lng = coords.getString("LONGITUDE");
+        //DEFAULT_LOCATION = coords.getString("DEFAULT_LOCATION");
+        DEFAULT_LOCATION = lat + "," + lng;
+        DEFAULT_LOCATION = coords.getString("DEFAULT_LOCATION");
+        //Toast.makeText(
+         //   getApplicationContext(), "Obtained\n\t" + DEFAULT_LOCATION, Toast.LENGTH_SHORT).show();
+
+        Log.i(TAG, "In MainActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
+
         Intent placeIntent = getIntent();
         moreInfoIntent = new Intent(this, MoreInfo.class);
-        /*
-        Query JSON Format:
-        Array of JSON objects, representing individual restaurants
-        Each Object has..
-        "icon" - icon for restaurant
-        "name" - name of restaurant
-        "open?" - (bool) is this restaurant open
-        "location" - json object containing "lat" and "long" keys
-        "photoUrls" - array of urls (string) to restaurant photos
-         */
+
         String placesQueryJSON = placeIntent.getStringExtra(PlacesActivity.EXTRA_MESSAGE);
         //placesQueryJSON = placesQueryJSON.replace("\\", "");
-        Log.d("JSON String:", placesQueryJSON);
+        //Log.d("JSON String:", placesQueryJSON);
 
         acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(this);
@@ -167,6 +173,40 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Intent intent;
+
+        switch (item.getItemId())
+        {
+            case R.id.action_search:
+                Toast.makeText(this, "Opening Search Dialog...", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_locate:
+                Toast.makeText(this, "Acquiring Location...", Toast.LENGTH_SHORT).show();
+                intent = new Intent(MainActivity.this, LocationActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case R.id.action_map:
+                Toast.makeText(this, "Opening Map...", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, MapsActivity.class);
+                intent.putExtra("LATITUDE", lat);
+                intent.putExtra("LONGITUDE", lng);
+                startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                Toast.makeText(this, "Opening Settings...", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_about:
+                Toast.makeText(this, "About the application...", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

@@ -17,28 +17,51 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 public class PlacesActivity extends ActionBarActivity {
+
+    public final static String TAG = "PlacesActivity";
+
     private final String API_KEY = "AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU";
-    private final String DEFAULT_LOCATION = "34.0722, -118.4441";
+    private String DEFAULT_LOCATION = "34.0722, -118.4441";
     private final String DEFAULT_RADIUS = "1000";
     private final String PREFERRED_IMG_WIDTH = "200";
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
+    String latitude;
+    String longitude;
+
     public void startDisplayActivity(JSONArray ja){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, ja.toString());
+        intent.putExtra("LATITUDE", latitude);
+        intent.putExtra("LONGITUDE", longitude);
         startActivity(intent);
+        finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
+
+        Bundle coords = getIntent().getExtras();
+        latitude = coords.getString("LATITUDE");
+        longitude = coords.getString("LONGITUDE");
+        Toast.makeText(
+                getApplicationContext(), "Obtained\n\tLatitude: " + latitude
+                        + "\n\tLongitude: " + longitude, Toast.LENGTH_SHORT).show();
+        DEFAULT_LOCATION = latitude + "," + longitude;
+
+        Log.i(TAG, "in PlacesActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
 
         new Thread(new Runnable() {
             public void run() {
@@ -126,6 +149,7 @@ public class PlacesActivity extends ActionBarActivity {
                         //error handle here
                     }
                     //send data to mainactivity
+                    Log.i(TAG, "in PlacesActivity \nrestaurants: " + restaurants);
                     startDisplayActivity(restaurants);
                 } catch (Exception e){
                     e.printStackTrace();
