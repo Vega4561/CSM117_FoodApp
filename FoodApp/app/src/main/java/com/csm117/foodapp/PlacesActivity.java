@@ -30,7 +30,7 @@ public class PlacesActivity extends ActionBarActivity {
 
     public final static String TAG = "PlacesActivity";
 
-    private final String API_KEY = "AIzaSyApzOGdZ7s7U-BMdc90aZqMnwrZWxctMwU";
+    private final String API_KEY = "AIzaSyB-XwRDBBbolc5Xo7HAz5tCTcWsqJAj_bg";
     private String DEFAULT_LOCATION = "34.0722, -118.4441";
     private final String DEFAULT_RADIUS = "1000";
     private final String PREFERRED_IMG_WIDTH = "200";
@@ -74,7 +74,7 @@ public class PlacesActivity extends ActionBarActivity {
                             .path("/maps/api/place/nearbysearch/json")
                             .appendQueryParameter("location", DEFAULT_LOCATION)
                             .appendQueryParameter("radius", DEFAULT_RADIUS)
-                            .appendQueryParameter("types", "food")
+                            .appendQueryParameter("types", "restaurant")
                             .appendQueryParameter("key", API_KEY)
                             .build();
                     URL url = new URL(b.toString());
@@ -146,7 +146,7 @@ public class PlacesActivity extends ActionBarActivity {
                         }
                     }
                     else{
-                        //error handle here
+                        Log.i(TAG, "in PlacesActivity , thread failed");
                     }
                     //send data to mainactivity
                     Log.i(TAG, "in PlacesActivity \nrestaurants: " + restaurants);

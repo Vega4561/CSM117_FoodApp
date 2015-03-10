@@ -87,8 +87,8 @@ public class HomeActivity extends ActionBarActivity
             }
         };
 
-        Button btnGetSome = (Button) findViewById(R.id.btnSendQuery);
-        btnGetSome.setOnClickListener(fabClickListener);
+        //Button btnGetSome = (Button) findViewById(R.id.btnSendQuery);
+        //btnGetSome.setOnClickListener(fabClickListener);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
