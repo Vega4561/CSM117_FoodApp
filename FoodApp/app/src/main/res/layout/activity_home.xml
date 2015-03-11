@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csm117.foodapp.HomeActivity"
-    android:background="@drawable/background1">
-<!--
-    <Button
-        android:id="@+id/btnSendQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/places_send"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />-->
+    android:background="@drawable/background2">
+    <!--
+        <Button
+            android:id="@+id/btnSendQuery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/places_send"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />-->
     <!--    android:onClick="startYelpQuery" >-->
 
     <TextView
@@ -19,9 +19,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_gettingLocation"
         android:layout_marginBottom="31dp"
-        android:layout_above="@+id/btnSendQuery"
         android:layout_centerHorizontal="true"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,28 +28,25 @@
         android:id="@+id/address"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:textSize="25dp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_above="@+id/address"
-        android:layout_marginBottom="81dp"
-        android:layout_alignRight="@+id/btnSendQuery"
-        android:layout_alignEnd="@+id/btnSendQuery"
-        android:layout_alignLeft="@+id/btnSendQuery"
-        android:layout_alignStart="@+id/btnSendQuery"
-        android:layout_alignParentTop="true" />
+        android:textColor="#ff000000"
+        android:textSize="20sp"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progBar"
-        android:layout_above="@+id/tv_gettingLocation"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
-        android:visibility="invisible" />
+        android:layout_marginBottom="57dp"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView android:text="@string/gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff000000"
+        android:textSize="30sp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
