@@ -22,5 +22,6 @@
     <string name="title_activity_test">TEST</string>
     <string name="test">Testing fun, jolly good time.</string>
     <string name="title_activity_maps">Map</string>
+    <string name="nav_button">Navigate</string>
 
 </resources>

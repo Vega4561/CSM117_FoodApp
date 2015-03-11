@@ -32,13 +32,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     Button acceptButton;
     Button callButton;
+    Button navButton;
 
     JSONArray GalImages;
     Intent browserIntent;
     Intent callIntent;
     Intent moreInfoIntent;
+    Intent mapIntent;
     boolean urlAvailable;
     boolean phoneAvailable;
+    boolean coordAvailable;
     TextView infoTextView;
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
@@ -58,7 +61,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         DEFAULT_LOCATION = lat + "," + lng;
         DEFAULT_LOCATION = coords.getString("DEFAULT_LOCATION");
         //Toast.makeText(
-         //   getApplicationContext(), "Obtained\n\t" + DEFAULT_LOCATION, Toast.LENGTH_SHORT).show();
+        //   getApplicationContext(), "Obtained\n\t" + DEFAULT_LOCATION, Toast.LENGTH_SHORT).show();
 
         Log.i(TAG, "In MainActivity \nDEFAULT_LOCATION: " + DEFAULT_LOCATION);
 
@@ -73,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         acceptButton.setOnClickListener(this);
         callButton = (Button) findViewById(R.id.call_button);
         callButton.setOnClickListener(this);
+        navButton = (Button) findViewById(R.id.nav_button);
+        navButton.setOnClickListener(this);
         infoTextView = (TextView) findViewById(R.id.info_textview);
         infoTextView.setTextSize(20);
 
@@ -85,6 +90,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         PorterDuffColorFilter filterDc = new PorterDuffColorFilter(0xffB3002D, PorterDuff.Mode.SRC_ATOP);
         dc.setColorFilter(filterDc);
         callButton.setTextColor(Color.parseColor("white"));
+
+        Drawable dn = navButton.getBackground();
+        PorterDuffColorFilter filterDn = new PorterDuffColorFilter(0xff6188FF, PorterDuff.Mode.SRC_ATOP);
+        dn.setColorFilter(filterDn);
+        navButton.setTextColor(Color.parseColor("white"));
 
         try {
             GalImages = new JSONArray(placesQueryJSON);
@@ -120,7 +130,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     // Get coordinates
                     lat = json.optJSONObject("location").optString("lat");
                     lng = json.optJSONObject("location").optString("lng");
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat+","+lng);
+                    mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    coordAvailable = true;
                 }
+                else
+                    coordAvailable = false;
                 /*
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
@@ -149,7 +165,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             // Get coordinates
             lat = json.optJSONObject("location").optString("lat");
             lng = json.optJSONObject("location").optString("lng");
+            Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat+","+lng);
+            mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            coordAvailable = true;
         }
+        else
+            coordAvailable = false;
         /*
         if (json.has("url")) {
             browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
@@ -175,6 +197,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
         if(buttonName.equals("Call") && phoneAvailable){
             startActivity(callIntent);
+        }
+        if(buttonName.equals("Navigate") && coordAvailable){
+            startActivity(mapIntent);
         }
     }
 
