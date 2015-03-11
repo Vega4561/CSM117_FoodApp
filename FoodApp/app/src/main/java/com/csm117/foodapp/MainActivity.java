@@ -32,13 +32,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     Button acceptButton;
     Button callButton;
+	Button navButton;
 
     JSONArray GalImages;
     Intent browserIntent;
     Intent callIntent;
     Intent moreInfoIntent;
+	Intent mapIntent;
     boolean urlAvailable;
     boolean phoneAvailable;
+	boolean coordAvailable;
     TextView infoTextView;
     public final static String EXTRA_MESSAGE = "com.csm117.foodapp.MESSAGE";
 
@@ -73,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         acceptButton.setOnClickListener(this);
         callButton = (Button) findViewById(R.id.call_button);
         callButton.setOnClickListener(this);
+		navButton = (Button) findViewById(R.id.nav_button);
+        navButton.setOnClickListener(this);
         infoTextView = (TextView) findViewById(R.id.info_textview);
         infoTextView.setTextSize(20);
 
@@ -120,7 +125,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     // Get coordinates
                     lat = json.optJSONObject("location").optString("lat");
                     lng = json.optJSONObject("location").optString("lng");
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat+","+lng);
+                    mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    coordAvailable = true;
                 }
+                else
+                    coordAvailable = false;
                 /*
                 if (json.has("url")) {
                     browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
@@ -149,7 +160,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             // Get coordinates
             lat = json.optJSONObject("location").optString("lat");
             lng = json.optJSONObject("location").optString("lng");
-        }
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat+","+lng);
+                    mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    coordAvailable = true;
+                }
+                else
+                    coordAvailable = false;
         /*
         if (json.has("url")) {
             browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(json.optString("url")));
@@ -175,6 +192,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
         if(buttonName.equals("Call") && phoneAvailable){
             startActivity(callIntent);
+        }
+		if(buttonName.equals("Navigation") && coordAvailable){
+            startActivity(mapIntent);
         }
     }
 
