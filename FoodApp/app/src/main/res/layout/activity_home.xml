@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csm117.foodapp.HomeActivity"
-    android:background="@drawable/background1">
+    android:background="@drawable/foodfinderbg">
 <!--
     <Button
         android:id="@+id/btnSendQuery"
