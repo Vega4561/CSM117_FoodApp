@@ -21,7 +21,7 @@
     <permission
         android:name="com.csm117.foodapp.permission.MAPS_RECEIVE"
         android:protectionLevel="signature"/>
-    <uses-permission android:name="ca.sfu.cmpt276.bfraser.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="com.csm117.foodapp.permission.MAPS_RECEIVE"/>
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
@@ -41,7 +41,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.csm117.foodapp.MainActivity" />
         </activity>
-
 
         <activity
             android:name=".HomeActivity"

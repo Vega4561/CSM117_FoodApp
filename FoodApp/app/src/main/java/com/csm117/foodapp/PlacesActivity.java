@@ -1,29 +1,20 @@
 package com.csm117.foodapp;
 
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-
 import android.content.Intent;
 import android.net.Uri;
-import android.net.Uri.Builder;
-
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class PlacesActivity extends ActionBarActivity {
@@ -85,6 +76,7 @@ public class PlacesActivity extends ActionBarActivity {
                     InputStream is = conn.getInputStream();
                     java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
                     String response =  s.hasNext() ? s.next() : "";
+
 
                     JSONArray restaurants = new JSONArray();
                     JSONObject respJson = new JSONObject(response);
